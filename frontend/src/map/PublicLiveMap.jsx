@@ -6,10 +6,8 @@ delete L.Icon.Default.prototype._getIconUrl
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
   iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-})
-
-const API_BASE = 'http://127.0.0.1:8000'
+  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png'
+const API_BASE = import.meta.env.VITE_API_BASE || ''
 
 export default function PublicLiveMap({ shipmentId }) {
   const containerRef = useRef(null)
@@ -77,7 +75,9 @@ export default function PublicLiveMap({ shipmentId }) {
   // 3. Open the WebSocket for live updates
   useEffect(() => {
     if (!shipmentId) return
-    const url = `ws://127.0.0.1:8000/ws/tracking/${shipmentId}/`
+    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
+    const host = window.location.host  // includes domain and port
+    const url = `${protocol}//${host}/ws/tracking/${shipmentId}/`
     console.log('[PublicLiveMap] connecting to', url)
 
     const ws = new WebSocket(url)

@@ -38,7 +38,9 @@ export default function AdminLiveMap({ shipmentId, token }) {
 
   useEffect(() => {
     if (!shipmentId) return
-    const url = `ws://127.0.0.1:8000/ws/tracking/${shipmentId}/`
+    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
+const host = window.location.host  // includes domain and port
+const url = `${protocol}//${host}/ws/tracking/${shipmentId}/`
     const ws = new WebSocket(url)
     wsRef.current = ws
 

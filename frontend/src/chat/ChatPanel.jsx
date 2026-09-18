@@ -10,8 +10,11 @@ export default function ChatPanel({ shipmentId, tracking, token, height = 420 })
 
   useEffect(() => {
     if (!shipmentId) return
-
-    let url = `ws://127.0.0.1:8000/ws/chat/shipment_${shipmentId}/`
+     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
+const host = window.location.host
+let url = `${protocol}//${host}/ws/chat/shipment_${shipmentId}/`
+if (token) url += `?token=${token}`
+else if (tracking) url += `?tracking=${tracking}`
     if (token) {
       url += `?token=${token}`
     } else if (tracking) {
